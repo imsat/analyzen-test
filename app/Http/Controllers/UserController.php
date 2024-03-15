@@ -12,7 +12,11 @@ class UserController extends Controller
      */
     public function index()
     {
-        //
+        $users = User::latest()
+            ->select(['id', 'name', 'email', 'avatar', 'created_at'])
+            ->paginate();
+
+        return view('user.index', compact('users'));
     }
 
     /**
@@ -20,7 +24,7 @@ class UserController extends Controller
      */
     public function create()
     {
-        //
+        return view('user.create');
     }
 
     /**
@@ -36,7 +40,7 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-        //
+        return view('user.show', compact('user'));
     }
 
     /**
@@ -44,7 +48,7 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
-        //
+        return view('user.edit', compact('user'));
     }
 
     /**
@@ -52,7 +56,7 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user)
     {
-        //
+        dd($user);
     }
 
     /**
@@ -60,6 +64,6 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
-        //
+        $user->delete();
     }
 }
