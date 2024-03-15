@@ -54,9 +54,9 @@
                         </div>
 
                         <div class="flex items-center justify-end mt-4">
-                            <x-danger-button onClick="window.location='{{ route('users.index')}}'">
+                            <x-secondary-button onClick="window.location='{{ route('users.index')}}'">
                                 {{ __('Cancel') }}
-                            </x-danger-button>
+                            </x-secondary-button>
                             <x-primary-button class="ms-4">
                                 {{ __('Create') }}
                             </x-primary-button>

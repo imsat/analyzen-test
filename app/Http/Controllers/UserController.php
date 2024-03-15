@@ -40,6 +40,7 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
+        $user->load('address:id,name,user_id');
         return view('user.show', compact('user'));
     }
 

@@ -4,9 +4,9 @@
             <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight ">
                 {{ __('User Show') }}
             </h2>
-            <x-danger-button onClick="window.location='{{ route('users.index')}}'" class="">
+            <x-secondary-button onClick="window.location='{{ route('users.index')}}'" class="">
                 {{ __('Back') }}
-            </x-danger-button>
+            </x-secondary-button>
         </div>
     </x-slot>
 
