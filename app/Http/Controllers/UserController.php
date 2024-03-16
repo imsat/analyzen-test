@@ -2,21 +2,37 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UserRequest;
+use App\Interfaces\CrudInterface;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
+    protected $userService;
+
+    public function __construct(CrudInterface $userService)
+    {
+        $this->userService = $userService;
+    }
+
     /**
      * Display a listing of the resource.
+     *
+     * @param Request $request
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Foundation\Application|string
      */
-    public function index()
+    public function index(Request $request)
     {
-        $users = User::latest()
-            ->select(['id', 'name', 'email', 'avatar', 'created_at'])
-            ->paginate();
+        try {
+            $onlyTrashed = $request->get('only_trashed');
+            $users = $this->userService->index($onlyTrashed);
+            return view('user.index', compact('users'));
+        } catch (\Exception $e) {
+            return redirect()->back()->with('failed', $e->getMessage() ?? 'Something went wrong!');
+        }
 
-        return view('user.index', compact('users'));
     }
 
     /**
@@ -30,9 +46,16 @@ class UserController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(UserRequest $request)
     {
-        //
+        try {
+            $data = $request->only(['name', 'email', 'avatar', 'address']);
+            $data['password'] = Hash::make($request->input('password'));
+            $this->userService->createOrUpdate($data);
+            return redirect()->route('users.index')->with('success', 'Added successfully!');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('failed', $e->getMessage() ?? 'Something went wrong!');
+        }
     }
 
     /**
@@ -40,8 +63,12 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-        $user->load('address:id,name,user_id');
-        return view('user.show', compact('user'));
+        try {
+            $user = $this->userService->show($user);
+            return view('user.show', compact('user'));
+        } catch (\Exception $e) {
+            return redirect()->back()->with('failed', $e->getMessage() ?? 'Something went wrong!');
+        }
     }
 
     /**
@@ -49,7 +76,12 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
-        return view('user.edit', compact('user'));
+        try {
+            $user->load('address:id,name,user_id');
+            return view('user.edit', compact('user'));
+        } catch (\Exception $e) {
+            return redirect()->back()->with('failed', $e->getMessage() ?? 'Something went wrong!');
+        }
     }
 
     /**
@@ -57,7 +89,14 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user)
     {
-        dd($user);
+        try {
+            $data = $request->only(['name', 'email', 'avatar', 'address']);
+            $data['password'] = Hash::make($request->input('password'));
+            $this->userService->createOrUpdate($data, $user);
+            return redirect()->route('users.index')->with('success', 'Updated successfully!');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('failed', $e->getMessage() ?? 'Something went wrong!');
+        }
     }
 
     /**
@@ -65,6 +104,11 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
-        $user->delete();
+        try {
+            $this->userService->delete($user);
+            return redirect()->back()->with('success', 'Deleted successfully!');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('failed', $e->getMessage() ?? 'Something went wrong!');
+        }
     }
 }
