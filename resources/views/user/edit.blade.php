@@ -40,6 +40,21 @@
                             <img src="{{$user->avatar}}" class="img-40 mt-2" alt="User avatar">
                         </div>
 
+                        <!-- Address -->
+                        <div class="mt-4">
+                            <x-input-label :value="__('Addresses')"/>
+                            <div x-data="{ addresses: {{$user->addresses->pluck('name')}} }">
+                                <template x-for="(address, index) in addresses" :key="index">
+                                    <div class="flex items-center mt-4">
+                                        <x-text-input type="text" x-model="addresses[index]" name="addresses[]" autofocus class="block mt-1 w-full"/>
+                                        <button @click.prevent="addresses.splice(index, 1)" type="button" class="ml-2 px-2 py-1 bg-red-500 text-white rounded-md">Remove</button>
+                                    </div>
+                                </template>
+                                <button @click.prevent="addresses.push('')" type="button" class="mt-4 px-2 py-1 bg-green-500 text-white rounded-md">Add More Address</button>
+                            </div>
+                        </div>
+
+
                         <div class="flex items-center justify-end mt-4">
                             <x-secondary-button onClick="window.location='{{ route('users.index')}}'">
                                 {{ __('Cancel') }}

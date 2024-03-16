@@ -3,6 +3,7 @@
 namespace App\Service;
 
 
+use App\Events\UserSaved;
 use App\Interfaces\CrudInterface;
 use App\Models\User;
 
@@ -62,6 +63,8 @@ class UserService extends Service implements CrudInterface
         }
         $user->fill($data);
         $user->save();
+        // Trigger event
+        event(new UserSaved($user, $data['addresses']));
         return $user->fresh();
     }
 

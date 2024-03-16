@@ -48,7 +48,7 @@ class UserController extends Controller
     public function store(UserRequest $request)
     {
         try {
-            $data = $request->only(['name', 'email', 'avatar', 'address']);
+            $data = $request->only(['name', 'email', 'avatar', 'addresses']);
             $data['password'] = Hash::make($request->input('password'));
             $this->userService->createOrUpdate($data);
             return redirect()->route('users.index')->with('success', 'Added successfully!');
@@ -89,7 +89,7 @@ class UserController extends Controller
     public function update(Request $request, User $user)
     {
         try {
-            $data = $request->only(['name', 'email', 'avatar', 'address']);
+            $data = $request->only(['name', 'email', 'avatar', 'addresses']);
             $data['password'] = Hash::make($request->input('password'));
             $this->userService->createOrUpdate($data, $user);
             return redirect()->route('users.index')->with('success', 'Updated successfully!');
