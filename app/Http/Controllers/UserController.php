@@ -76,7 +76,7 @@ class UserController extends Controller
     public function edit(User $user)
     {
         try {
-            $user->load('address:id,name,user_id');
+            $user->load('addresses:id,name,user_id');
             return view('user.edit', compact('user'));
         } catch (\Exception $e) {
             return redirect()->back()->with('failed', $e->getMessage() ?? 'Something went wrong!');

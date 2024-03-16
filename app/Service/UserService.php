@@ -8,6 +8,8 @@ use App\Models\User;
 
 class UserService extends Service implements CrudInterface
 {
+    private $filePath = '/user';
+
     /**
      * Get all users.
      *
@@ -33,7 +35,7 @@ class UserService extends Service implements CrudInterface
      */
     public function show($user)
     {
-        return $user->load('address:id,name,user_id');
+        return $user->load('addresses:id,name,user_id');
     }
 
     /**
@@ -46,6 +48,15 @@ class UserService extends Service implements CrudInterface
 
     public function createOrUpdate($data, $user = null)
     {
+        // Avatar upload
+        if (data_get($data, 'avatar')) {
+            if (!blank($user) && $user->getRawOriginal('avatar')) {
+                UploadService::cleanFile($user->getRawOriginal('avatar'));
+            }
+            $data['avatar'] = UploadService::upload($data['avatar'], $this->filePath);
+        }
+
+        // Check exists user
         if (blank($user)) {
             $user = new User();
         }
@@ -62,6 +73,7 @@ class UserService extends Service implements CrudInterface
      */
     public function delete($user)
     {
+        // Soft delete a user
         $user->delete();
         return true;
     }

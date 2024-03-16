@@ -1,3 +1,13 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.required:after {
+    content: " *" !important;
+    color: red !important;
+}
+
+.img-40 {
+    height: 40px;
+    width: 40px;
+}

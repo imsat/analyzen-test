@@ -21,24 +21,19 @@ class UserRequest extends FormRequest
      */
     public function rules(): array
     {
-        switch ($this->method()) {
-            case 'PATCH':
-            case 'PUT':
-                $rules = [
-                    'name' => 'required|string',
-                    'email'  => "nullable|email|string|unique:users,email,{$this->user->id}",
-                    'password' => 'nullable|string|min:6|confirmed',
-                ];
-                break;
-
-            default:
-                $rules = [
-                    'name' => 'required|string',
-                    'email'  => 'email|string|unique:users,email',
-                    'password' => 'required|string|min:6|confirmed',
-                ];
-                break;
-        }
-        return $rules;
+        return match ($this->method()) {
+            'PATCH', 'PUT' => [
+                'name' => 'required|string',
+                'email' => "nullable|email|unique:users,email,{$this->user->id}",
+                'password' => 'nullable|string|min:6|confirmed',
+                "avatar" => "nullable|mimes:jpeg,jpg,png,svg,webp|image|max:2048",
+            ],
+            default => [
+                'name' => 'required|string',
+                'email' => 'email|unique:users,email',
+                'password' => 'required|string|min:6|confirmed',
+                "avatar" => "nullable|mimes:jpeg,jpg,png,svg,webp|image|max:2048",
+            ],
+        };
     }
 }
