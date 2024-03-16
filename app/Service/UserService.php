@@ -16,9 +16,11 @@ class UserService extends Service implements CrudInterface
      */
     public function index($onlyTrashed = null)
     {
-        $query = User::latest()->select(['id', 'name', 'email', 'avatar', 'created_at']);
+        $query = User::latest();
         if ($onlyTrashed) {
-            $query->onlyTrashed();
+            $query->select(['id', 'name', 'deleted_at'])->onlyTrashed();
+        } else {
+            $query->select(['id', 'name', 'email', 'avatar', 'created_at']);
         }
         return $query->paginate();
     }
@@ -61,18 +63,6 @@ class UserService extends Service implements CrudInterface
     public function delete($user)
     {
         $user->delete();
-        return true;
-    }
-
-    /**
-     * Permanent delete user.
-     *
-     * @param $user
-     * @return true
-     */
-    public function permanentDelete($user)
-    {
-        $user->forceDelete();
         return true;
     }
 

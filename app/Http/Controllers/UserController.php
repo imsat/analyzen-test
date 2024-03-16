@@ -26,8 +26,7 @@ class UserController extends Controller
     public function index(Request $request)
     {
         try {
-            $onlyTrashed = $request->get('only_trashed');
-            $users = $this->userService->index($onlyTrashed);
+            $users = $this->userService->index();
             return view('user.index', compact('users'));
         } catch (\Exception $e) {
             return redirect()->back()->with('failed', $e->getMessage() ?? 'Something went wrong!');
@@ -104,6 +103,9 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
+        if(auth()->id() == $user->id){
+            abort(403, 'Deleting yourself is not an option!!');
+        }
         try {
             $this->userService->delete($user);
             return redirect()->back()->with('success', 'Deleted successfully!');

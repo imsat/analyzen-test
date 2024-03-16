@@ -8,5 +8,4 @@ interface CrudInterface
     public function createOrUpdate(array $data, $user = null);
     public function show($user);
     public function delete($user);
-    public function permanentDelete($user);
 }
