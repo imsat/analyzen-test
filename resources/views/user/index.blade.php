@@ -35,10 +35,9 @@
                                 <x-td><img src="{{$user->avatar}}" class="img-40" alt="User avatar"></x-td>
                                 <x-td>{{$user->created_at}}</x-td>
                                 <x-td>
-                                    <x-a-button href="{{route('users.show', $user->id)}}"
-                                                class="bg-cyan-600 hover:bg-cyan-700 focus:ring-cyan-500">
+                                    <x-a-cyan-button href="{{route('users.show', $user->id)}}">
                                         {{ __('Show') }}
-                                    </x-a-button>
+                                    </x-a-cyan-button>
                                     <x-a-button href="{{route('users.edit', $user->id)}}">
                                         {{ __('Edit') }}
                                     </x-a-button>
