@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Storage;
 class UploadService extends Service
 {
     /**
-     * Upload file.
+     * Upload resource.
      *
      * @param $file
      * @param $filePath
@@ -21,7 +21,7 @@ class UploadService extends Service
     }
 
     /**
-     * Set file.
+     * Set resource.
      *
      * @param $file_name
      * @param $file
@@ -29,7 +29,6 @@ class UploadService extends Service
      */
     public static function setFile($file_name, $file)
     {
-//        return Storage::put($file_name, $file, 'public');
         return Storage::put($file_name, $file);
     }
 

@@ -90,7 +90,6 @@ class UserController extends Controller
     {
         try {
             $data = $request->only(['name', 'email', 'avatar', 'addresses']);
-            $data['password'] = Hash::make($request->input('password'));
             $this->userService->createOrUpdate($data, $user);
             return redirect()->route('users.index')->with('success', 'Updated successfully!');
         } catch (\Exception $e) {
