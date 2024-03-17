@@ -40,20 +40,21 @@ This project combines Laravel as the backend framework with alpinejs & tailwind 
     ```bash
    CDN_URL=your_cdn_url
 
-5. **Generate the application key:**
+6. **Generate the application key:**
     ```bash
     php artisan key:generate
 
-6. **Run database migrations and seed data:**
+7. **Run database migrations and seed data:**
     ```bash
     php artisan migrate --seed
 
 ## Running the Application
 
-7. **Run the Laravel development server:**
+8. **Run the Laravel development server:**
     ```bash
     php artisan serve
-8. **Access the application in your browser:**
+   
+9. **Access the application in your browser:**
 
 Open your browser and navigate to http://127.0.0.1:8000 or desired port show in your terminal.
 
