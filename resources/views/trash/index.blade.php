@@ -28,16 +28,14 @@
                                 <x-td>{{$user->name}}</x-td>
                                 <x-td>{{$user->deleted_at}}</x-td>
                                 <x-td>
-                                    <form action="{{route('trashes.restore', ['model' =>  class_basename($user), 'id'=>$user->id])}}" class="inline-flex"
-                                          method="POST">
+                                    <form action="{{route('users.restore', $user->id)}}" class="inline-flex" method="POST">
                                         @csrf
-                                        @method('patch')
+                                        @method('PATCH')
                                         <x-primary-button onclick="return confirm('Are you sure to restore?')">
                                             {{ __('Restore') }}
                                         </x-primary-button>
                                     </form>
-                                    <form action="{{route('trashes.destroy', ['model' =>  class_basename($user), 'id'=>$user->id])}}" class="inline-flex"
-                                          method="POST">
+                                    <form action="{{route('users.permanently-destroy', $user->id)}}" class="inline-flex" method="POST">
                                         @csrf
                                         @method('DELETE')
                                         <x-danger-button onclick="return confirm('Are you sure to permanently delete?')">

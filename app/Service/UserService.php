@@ -64,7 +64,7 @@ class UserService extends Service implements CrudInterface
         $user->fill($data);
         $user->save();
         // Trigger event
-        if(data_get($data, 'addresses')){
+        if (data_get($data, 'addresses')) {
             event(new UserSaved($user, $data['addresses']));
         }
         return $user->fresh();
@@ -78,9 +78,48 @@ class UserService extends Service implements CrudInterface
      */
     public function delete($user)
     {
-        // Soft delete a user
+        // Soft delete a user.
         $user->delete();
         return true;
+    }
+
+    /**
+     * Restore user.
+     *
+     * @param $id
+     * @return true
+     */
+    public function restore($id)
+    {
+        $user = $this->getTrashUser($id);
+        // Restore from trash.
+        $user->restore();
+        return true;
+    }
+
+    /**
+     * Permanently delete user.
+     *
+     * @param $id
+     * @return true
+     */
+    public function permanentDelete($id)
+    {
+        $user = $this->getTrashUser($id);
+        // Permanently delete from trash.
+        $user->forceDelete();
+        return true;
+    }
+
+    /**
+     * Find trash user.
+     *
+     * @param $id
+     * @return \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection|\Illuminate\Database\Eloquent\Model|\Illuminate\Database\Query\Builder|\Illuminate\Database\Query\Builder[]|null
+     */
+    protected function getTrashUser($id)
+    {
+        return User::withTrashed()->findOrFail($id);
     }
 
 }

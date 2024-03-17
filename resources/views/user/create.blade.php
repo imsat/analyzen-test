@@ -65,7 +65,7 @@
                         <!-- Address -->
                         <div class="mt-4">
                             <x-input-label :value="__('Addresses')"/>
-                            <div x-data="{ addresses: [''] }">
+                            <div x-data="{ addresses: [] }">
                                 <template x-for="(address, index) in addresses" :key="index">
                                     <div class="flex items-center mt-4">
 {{--                                        <input type="text" x-model="fields[index]" name="address[]" class="block mt-1 w-full">--}}
@@ -73,8 +73,9 @@
                                         <button @click.prevent="addresses.splice(index, 1)" type="button" class="ml-2 px-2 py-1 bg-red-500 text-white rounded-md">Remove</button>
                                     </div>
                                 </template>
-                                <button @click.prevent="addresses.push('')" type="button" class="mt-4 px-2 py-1 bg-green-500 text-white rounded-md">Add More Address</button>
+                                <button @click.prevent="addresses.push('')" type="button" class="mt-4 px-2 py-1 bg-green-500 text-white rounded-md">Add Address</button>
                             </div>
+                            <x-input-error :messages="$errors->first('addresses.*')" class="mt-2"/>
                         </div>
 
                         <div class="flex items-center justify-end mt-4">

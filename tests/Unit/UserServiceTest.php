@@ -5,6 +5,7 @@ namespace Tests\Unit;
 use App\Models\Address;
 use App\Models\User;
 use App\Service\UserService;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -97,5 +98,40 @@ class UserServiceTest extends TestCase
         $user = User::factory()->create();
         $this->userService->delete($user);
         $this->assertSoftDeleted($user);
+    }
+
+    /**
+     * Restore from trash.
+     */
+    public function test_it_can_restore_soft_deleted_a_user()
+    {
+        // Create a test user
+        $user = User::factory()->create();
+        $this->userService->delete($user);
+        $this->userService->restore($user->id);
+        $this->assertFalse($user->fresh()->trashed());
+    }
+
+    /**
+     * Check exception
+     */
+    public function test_it_throws_exception_when_restoring_nonexistent_user()
+    {
+        $this->expectException(ModelNotFoundException::class);
+        $this->userService->restore(111);
+    }
+
+    /**
+     * Permanently delete of from trash.
+     */
+    public function test_it_can_permanently_delete_a_user()
+    {
+        // Create a test user
+        $user = User::factory()->create();
+        $this->assertInstanceOf(User::class, $user);
+        // Soft delete user
+        $this->userService->delete($user);
+        $this->userService->permanentDelete($user->id);
+        $this->assertNotInstanceOf(User::class, $user->fresh());
     }
 }

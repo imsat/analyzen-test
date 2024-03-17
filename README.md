@@ -35,6 +35,10 @@ This project combines Laravel as the backend framework with alpinejs & tailwind 
     DB_DATABASE=your_database_name
     DB_USERNAME=your_database_username
     DB_PASSWORD=your_database_password
+   
+5. **Update the cdn url in the .env for your assets.
+    ```bash
+   CDN_URL=your_cdn_url
 
 5. **Generate the application key:**
     ```bash

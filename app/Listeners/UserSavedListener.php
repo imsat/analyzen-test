@@ -30,7 +30,9 @@ class UserSavedListener
         // Addresses data set make.
         $data = [];
         foreach ($addresses as $key => $address) {
-            $data[$key]['name'] = $address;
+            if(!blank($address)){
+                $data[$key]['name'] = $address;
+            }
         }
 
         // Create user addresses

@@ -52,6 +52,7 @@
                                 </template>
                                 <button @click.prevent="addresses.push('')" type="button" class="mt-4 px-2 py-1 bg-green-500 text-white rounded-md">Add More Address</button>
                             </div>
+                            <x-input-error :messages="$errors->first('addresses.*')" class="mt-2"/>
                         </div>
 
 

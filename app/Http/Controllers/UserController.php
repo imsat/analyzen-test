@@ -20,10 +20,9 @@ class UserController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @param Request $request
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Foundation\Application|string
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Foundation\Application|\Illuminate\Http\RedirectResponse
      */
-    public function index(Request $request)
+    public function index()
     {
         try {
             $users = $this->userService->index();
@@ -47,6 +46,7 @@ class UserController extends Controller
      */
     public function store(UserRequest $request)
     {
+//        dd($request->all());
         try {
             $data = $request->only(['name', 'email', 'avatar', 'addresses']);
             $data['password'] = Hash::make($request->input('password'));
@@ -102,12 +102,38 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
-        if(auth()->id() == $user->id){
+        if (auth()->id() == $user->id) {
             abort(403, 'Deleting yourself is not an option!!');
         }
         try {
             $this->userService->delete($user);
             return redirect()->back()->with('success', 'Deleted successfully!');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('failed', $e->getMessage() ?? 'Something went wrong!');
+        }
+    }
+
+    /**
+     * Restore item from trash.
+     */
+    public function restoreFromTrash($id)
+    {
+        try {
+            $this->userService->restore($id);
+            return redirect()->back()->with('success', 'Restored successfully!');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('failed', $e->getMessage() ?? 'Something went wrong!');
+        }
+    }
+
+    /**
+     * Delete item from trash.
+     */
+    public function deleteFromTrash($id)
+    {
+        try {
+            $this->userService->permanentDelete($id);
+            return redirect()->back()->with('success', 'Permanently deleted successfully!');
         } catch (\Exception $e) {
             return redirect()->back()->with('failed', $e->getMessage() ?? 'Something went wrong!');
         }

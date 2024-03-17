@@ -26,14 +26,30 @@ class UserRequest extends FormRequest
                 'name' => 'required|string',
                 'email' => "nullable|email|unique:users,email,{$this->user->id}",
                 'password' => 'nullable|string|min:6|confirmed',
-                "avatar" => "nullable|mimes:jpeg,jpg,png,svg,webp|image|max:2048",
+                "avatar" => "nullable|mimes:jpeg,jpg,png,svg,webp,gif|image|max:2048",
+                'addresses' => 'nullable|bail|array',
+                'addresses.*' => 'required_with:addresses',
             ],
             default => [
                 'name' => 'required|string',
                 'email' => 'email|unique:users,email',
                 'password' => 'required|string|min:6|confirmed',
-                "avatar" => "nullable|mimes:jpeg,jpg,png,svg,webp|image|max:2048",
+                "avatar" => "nullable|mimes:jpeg,jpg,png,svg,webp,gif|image|max:2048",
+                'addresses' => 'nullable|bail|array',
+                'addresses.*' => 'required_with:addresses',
             ],
         };
+    }
+
+    /**
+     * Get the validation messages that apply to the request.
+     *
+     * @return string[]
+     */
+    public function messages()
+    {
+        return [
+            'addresses.*' => 'The all addresses field is required.',
+        ];
     }
 }
