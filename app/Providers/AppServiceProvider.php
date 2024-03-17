@@ -6,6 +6,8 @@ use App\Interfaces\CrudInterface;
 use App\Interfaces\TrashInterface;
 use App\Service\TrashService;
 use App\Service\UserService;
+//use Illuminate\Contracts\Container\Container;
+use Illuminate\Contracts\Container\Container;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -17,6 +19,7 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->app->bind(CrudInterface::class, UserService::class);
         $this->app->bind(TrashInterface::class, TrashService::class);
+        $this->app->bind( TrashService::class, Container::class);
     }
 
     /**

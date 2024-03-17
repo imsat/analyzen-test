@@ -32,7 +32,7 @@ class UserService extends Service implements CrudInterface
      * Show user
      *
      * @param $user
-     * @return void
+     * @return mixed
      */
     public function show($user)
     {
@@ -64,7 +64,9 @@ class UserService extends Service implements CrudInterface
         $user->fill($data);
         $user->save();
         // Trigger event
-        event(new UserSaved($user, $data['addresses']));
+        if(data_get($data, 'addresses')){
+            event(new UserSaved($user, $data['addresses']));
+        }
         return $user->fresh();
     }
 
