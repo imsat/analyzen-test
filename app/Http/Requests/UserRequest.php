@@ -32,7 +32,7 @@ class UserRequest extends FormRequest
             ],
             default => [
                 'name' => 'required|string',
-                'email' => 'email|unique:users,email',
+                'email' => 'required|email|unique:users,email',
                 'password' => 'required|string|min:6|confirmed',
                 "avatar" => "nullable|mimes:jpeg,jpg,png,svg,webp,gif|image|max:2048",
                 'addresses' => 'nullable|bail|array',
